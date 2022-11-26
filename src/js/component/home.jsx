@@ -5,48 +5,44 @@ import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
+
   const [tarea, nueva] = useState([]);
   const borrar = (b) => {
-    nueva(
-      tarea.filter((value, index, arr) => {
+    nueva(tarea.filter((value, index, arr) => {
         return index != b;
       })
     );
   };
 
   function putApi() {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+	var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
 
-    var raw = JSON.stringify(tarea);
+var raw = JSON.stringify(tarea);
 
-    var requestOptions = {
-      method: "PUT",
-      headers: myHeaders,
-      body: raw,
-      redirect: "follow",
-    };
+var requestOptions = {
+  method: 'PUT',
+  headers: myHeaders,
+  body: raw,
+  redirect: 'follow'
+};
 
-    fetch(
-      "https://assets.breatheco.de/apis/fake/todos/user/lulukkks",
-      requestOptions
-    )
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
-  
+fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOptions)
+  .then(response => response.text())
+  .then(result => console.log(result))
+  .catch(error => console.log('error', error));
 
+  }
   useEffect(() => {
     fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks")
       .then((response) => response.json())
       .then((data) => nueva(data));
   }, []);
-}
-  /*useEffect(()=>{
-	putApi();
-	}, [tarea]);
-*/
   
+  useEffect(()=>{
+	putApi();
+  }, [tarea]);
+
   return (
 
     <div className="text-center">
@@ -54,12 +50,12 @@ const Home = () => {
 
       <form
         onSubmit={(event) => {
-          event.preventDefault();
+          event.preventDefault(); /*que no se actualize el componente*/
           nueva([...tarea, { label: event.target[0].value, done: false }]);
           putApi();
         }}
       >
-        <input placeholder="¿cual es tu tarea?"></input>
+        <input type="text" placeholder="¿cual es tu tarea?"></input>
         <button> Ingresar </button>
       </form>
       {tarea.map((value, index) => {
@@ -73,7 +69,8 @@ const Home = () => {
       <p>Cantidad de tareas {tarea.length}</p>
     </div>
   );
-};
+
+}
 export default Home;
 
 /*useEffect(() => {
