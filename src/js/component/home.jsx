@@ -1,55 +1,82 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 //include images into your bundle
 import rigoImage from "../../img/rigo-baby.jpg";
 
 //create your first component
 const Home = () => {
-	const [tarea, nueva] = useState([]);
-		
-	
-	useEffect(() => {
-		fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks")
-		.then((response) => response.json())
-		.then((data) => nueva(data));
-		}, []);
+  const [tarea, nueva] = useState([]);
+  const borrar = (b) => {
+    nueva(
+      tarea.filter((value, index, arr) => {
+        return index != b;
+      })
+    );
+  };
 
-	return (
-		
-			<div className="text-center">
+  function putApi() {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
 
-				<h1 >Lista de Tareas </h1>
+    var raw = JSON.stringify(tarea);
 
-				<form  onSubmit={(event)=>{
-					event.preventDefault();
-					nueva([...tarea,event.target[0].value]);
-				}}>
+    var requestOptions = {
+      method: "PUT",
+      headers: myHeaders,
+      body: raw,
+      redirect: "follow",
+    };
 
-				<input placeholder="¿cual es tu tarea?"></input>
-				<button> Ingresar</button>
-				</form >
-				{tarea.map((value,index)=>{
-					return <li key={index}>{value.label} 
-					<button> X </button></li>
-			
-				})}
-				<h6>Cantidad de tareas</h6>
-			</div>
-	);
+    fetch(
+      "https://assets.breatheco.de/apis/fake/todos/user/lulukkks",
+      requestOptions
+    )
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  
+
+  useEffect(() => {
+    fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks")
+      .then((response) => response.json())
+      .then((data) => nueva(data));
+  }, []);
+}
+  /*useEffect(()=>{
+	putApi();
+	}, [tarea]);
+*/
+  
+  return (
+
+    <div className="text-center">
+      <h1>Lista de Tareas </h1>
+
+      <form
+        onSubmit={(event) => {
+          event.preventDefault();
+          nueva([...tarea, { label: event.target[0].value, done: false }]);
+          putApi();
+        }}
+      >
+        <input placeholder="¿cual es tu tarea?"></input>
+        <button> Ingresar </button>
+      </form>
+      {tarea.map((value, index) => {
+        return (
+          <li key={index}>
+            {value.label}
+            <button onClick={() => borrar(index)}> X </button>
+          </li>
+        );
+      })}
+      <p>Cantidad de tareas {tarea.length}</p>
+    </div>
+  );
 };
-
 export default Home;
-
 
 /*useEffect(() => {
     fetch("http://assets.breatheco.de/apis/fake/todos/user/lulukkks")
-    .then((response) => response.json())
-    .then((data) => setLista(data.results));
-    }, [];
-    return (
-        <di v>
-
-        </div>
-    )
-
+    
 */
