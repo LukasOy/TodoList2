@@ -39,10 +39,10 @@ fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOption
       .then((data) => nueva(data));
   }, []);
   
-  useEffect(()=>{
+ /* useEffect(()=>{
 	putApi();
   }, [tarea]);
-
+*/
   return (
 
     <div className="text-center">
