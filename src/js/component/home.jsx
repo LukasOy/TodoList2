@@ -7,12 +7,6 @@ import rigoImage from "../../img/rigo-baby.jpg";
 const Home = () => {
 
   const [tarea, nueva] = useState([]);
-  const borrar = (b) => {
-    nueva(tarea.filter((value, index, arr) => {
-        return index != b;
-      })
-    );
-  };
 
   function putApi() {
 	var myHeaders = new Headers();
@@ -39,10 +33,10 @@ fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOption
       .then((data) => nueva(data));
   }, []);
   
- /* useEffect(()=>{
+ useEffect(()=>{
 	putApi();
   }, [tarea]);
-*/
+
   return (
 
     <div className="text-center">
@@ -50,7 +44,7 @@ fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOption
 
       <form
         onSubmit={(event) => {
-          event.preventDefault(); /*que no se actualize el componente*/
+          event.preventDefault();
           nueva([...tarea, { label: event.target[0].value, done: false }]);
           putApi();
         }}
@@ -62,7 +56,9 @@ fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOption
         return (
           <li key={index}>
             {value.label}
-            <button onClick={() => borrar(index)}> X </button>
+            <button onClick={() => nueva(tarea.filter((value, i) => index != i))
+            }
+            > X </button>
           </li>
         );
       })}
@@ -73,7 +69,3 @@ fetch("https://assets.breatheco.de/apis/fake/todos/user/lulukkks", requestOption
 }
 export default Home;
 
-/*useEffect(() => {
-    fetch("http://assets.breatheco.de/apis/fake/todos/user/lulukkks")
-    
-*/
